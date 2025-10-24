@@ -26,10 +26,11 @@ import com.example.agmac.R
 import com.example.agmac.ui.theme.AppTheme
 import com.example.agmac.ui.components.BottomNavigationBar
 import com.example.agmac.ui.components.SectionTitle
+import androidx.navigation.NavHostController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CaregiverHomeScreen() {
+fun CaregiverHomeScreen(navController: NavHostController) {
     AppTheme {
         Scaffold(
             topBar = {
@@ -56,9 +57,7 @@ fun CaregiverHomeScreen() {
                     )
                 )
             },
-            bottomBar = {
-                BottomNavigationBar(selected = "Ajustes")
-            },
+            bottomBar = { BottomNavigationBar(navController) },
             containerColor = MaterialTheme.colorScheme.background
         ) { innerPadding ->
             LazyColumn(

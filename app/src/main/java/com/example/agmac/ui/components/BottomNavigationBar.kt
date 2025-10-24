@@ -12,29 +12,55 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.agmac.data.SessionManager
 
-data class BottomNavItem(val label: String, val icon: androidx.compose.ui.graphics.vector.ImageVector)
+data class BottomNavItem(val label: String, val icon: androidx.compose.ui.graphics.vector.ImageVector, val route: String)
+
 @Composable
-fun BottomNavigationBar(selected: String) {
-    val items = listOf(
-        BottomNavItem("Inicio", Icons.Outlined.Home),
-        BottomNavItem("Medicación", Icons.Outlined.MedicalServices),
-        BottomNavItem("Reportes", Icons.Outlined.Analytics),
-        BottomNavItem("Ajustes", Icons.Outlined.Settings)
-    )
-    var selectedIndex by remember { mutableStateOf(items.indexOfFirst { it.label == selected })  }
+fun BottomNavigationBar(navController: NavHostController) {
+    // Construir items dependientes del rol seleccionado
+    val items = if (SessionManager.role == "cuidador") {
+        listOf(
+            BottomNavItem("Inicio", Icons.Outlined.Home, "caregiver_home"),
+            BottomNavItem("Medicación", Icons.Outlined.MedicalServices, "caregiver_home"),
+            BottomNavItem("Reportes", Icons.Outlined.Analytics, "reports"),
+            BottomNavItem("Ajustes", Icons.Outlined.Settings, "caregiver_settings")
+        )
+    } else {
+        // por defecto o "paciente"
+        listOf(
+            BottomNavItem("Inicio", Icons.Outlined.Home, "patient_home"),
+            BottomNavItem("Medicación", Icons.Outlined.MedicalServices, "patient_medication"),
+            BottomNavItem("Reportes", Icons.Outlined.Analytics, "reports"),
+            BottomNavItem("Ajustes", Icons.Outlined.Settings, "patient_settings")
+        )
+    }
+
+    // Obtener ruta actual para marcar el item seleccionado
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route ?: ""
 
     NavigationBar(containerColor = MaterialTheme.colorScheme.background) {
-        items.forEachIndexed { index, item ->
+        items.forEach { item ->
             NavigationBarItem(
                 icon = { Icon(item.icon, contentDescription = item.label) },
                 label = { Text(item.label, fontSize = 12.sp) },
-                selected = selectedIndex == index,
-                onClick = { selectedIndex = index },
+                selected = currentRoute == item.route,
+                onClick = {
+                    if (currentRoute != item.route) {
+                        navController.navigate(item.route) {
+                            // Mantener una sola instancia en la pila y restaurar estado
+                            launchSingleTop = true
+                            restoreState = true
+                            popUpTo(navController.graph.startDestinationId) {
+                                saveState = true
+                            }
+                        }
+                    }
+                },
                 alwaysShowLabel = true
             )
         }

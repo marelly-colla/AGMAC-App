@@ -13,12 +13,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.agmac.ui.components.BottomNavigationBar
 import com.example.agmac.ui.theme.AppTheme
+import androidx.navigation.NavHostController
 
 @Composable
-fun ReportsScreen() {
+fun ReportsScreen(navController: NavHostController) {
     AppTheme {
         Scaffold(
-            bottomBar = { BottomNavigationBar(selected = "Reportes") },
+            bottomBar = { BottomNavigationBar(navController) },
             containerColor = MaterialTheme.colorScheme.background
         ) { padding ->
             Column(

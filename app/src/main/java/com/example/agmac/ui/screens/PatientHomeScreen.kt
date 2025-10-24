@@ -11,10 +11,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import com.example.agmac.ui.theme.AppTheme
 import com.example.agmac.ui.components.BottomNavigationBar
 import com.example.agmac.ui.components.SectionTitle
+import androidx.navigation.NavHostController
 
 // --- Data classes ---
 data class Medicamento(val nombre: String, val hora: String)
@@ -32,8 +29,7 @@ data class Recordatorio(val nombre: String, val tiempo: String)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PatientHomeScreen() {
-    var selectedIndex by remember { mutableIntStateOf(0) }
+fun PatientHomeScreen(navController: NavHostController) {
     AppTheme {
         Scaffold(
             topBar = {
@@ -56,7 +52,7 @@ fun PatientHomeScreen() {
                     }
                 )
             },
-            bottomBar = { BottomNavigationBar(selected = "Inicio") },
+            bottomBar = { BottomNavigationBar(navController) },
             floatingActionButton = {
                 ExtendedFloatingActionButton(
                     onClick = { /* TODO: agregar medicamento */ },
