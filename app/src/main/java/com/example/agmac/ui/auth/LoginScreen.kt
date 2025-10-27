@@ -13,6 +13,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.agmac.ui.theme.AppTheme
 import androidx.compose.runtime.collectAsState
+import com.example.agmac.ui.viewmodel.LoginViewModel
 
 @Composable
 fun SignUpScreen(navController: NavController, viewModel: LoginViewModel = viewModel()) {

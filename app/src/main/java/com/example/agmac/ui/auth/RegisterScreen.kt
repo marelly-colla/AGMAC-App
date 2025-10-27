@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.agmac.ui.theme.AppTheme
+import com.example.agmac.ui.viewmodel.RegisterViewModel
 
 @Composable
 fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel = viewModel()) {

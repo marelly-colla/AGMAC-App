@@ -1,4 +1,4 @@
-package com.example.agmac.ui.auth
+package com.example.agmac.ui.viewmodel
 
 import android.app.Application
 import android.util.Log
@@ -11,7 +11,11 @@ import kotlinx.coroutines.launch
 
 class RegisterViewModel(application: Application) : AndroidViewModel(application) {
     private val repo = UserRepository(application)
-
+    data class RegisterUiState(
+        val isLoading: Boolean = false,
+        val success: Boolean = false,
+        val errorMessage: String? = null
+    )
     private val _uiState = MutableStateFlow(RegisterUiState())
     val uiState = _uiState.asStateFlow()
 

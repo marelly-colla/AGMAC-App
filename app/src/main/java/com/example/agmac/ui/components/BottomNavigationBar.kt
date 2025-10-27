@@ -33,7 +33,7 @@ fun BottomNavigationBar(navController: NavHostController) {
         // por defecto o "paciente"
         listOf(
             BottomNavItem("Inicio", Icons.Outlined.Home, "patient_home"),
-            BottomNavItem("Medicación", Icons.Outlined.MedicalServices, "patient_medication"),
+            BottomNavItem("Pacientes", Icons.Outlined.MedicalServices, "patient_medication"),
             BottomNavItem("Reportes", Icons.Outlined.Analytics, "reports"),
             BottomNavItem("Ajustes", Icons.Outlined.Settings, "patient_settings")
         )
