@@ -6,6 +6,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.agmac.ui.screens.*
 import com.example.agmac.data.SessionManager
+import com.example.agmac.ui.auth.SignUpScreen
+import com.example.agmac.ui.auth.RegisterScreen
 
 @Composable
 fun AppNavHost(navController: NavHostController) {
@@ -18,6 +20,7 @@ fun AppNavHost(navController: NavHostController) {
 
         // Pantalla 2: Login
         composable("login") { SignUpScreen(navController) }
+        composable("register") { RegisterScreen(navController) }
 
         // Pantalla 3: Selección de rol
         composable("role_selection") {

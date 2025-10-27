@@ -1,4 +1,4 @@
-package com.example.agmac.ui.screens
+package com.example.agmac.ui.auth
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -9,15 +9,18 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.agmac.ui.theme.AppTheme
+import androidx.compose.runtime.collectAsState
 
 @Composable
-fun SignUpScreen(navController: NavController) {
+fun SignUpScreen(navController: NavController, viewModel: LoginViewModel = viewModel()) {
     AppTheme {
-        var name by remember { mutableStateOf("") }
         var email by remember { mutableStateOf("") }
         var password by remember { mutableStateOf("") }
+
+        val uiState by viewModel.uiState.collectAsState()
 
         Scaffold(
             containerColor = MaterialTheme.colorScheme.background
@@ -30,26 +33,11 @@ fun SignUpScreen(navController: NavController) {
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Crear cuenta",
+                    text = "Inicia sesión",
                     fontSize = 28.sp,
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
-                Text(
-                    text = "Regístrate para empezar a gestionar tu medicación.",
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(bottom = 24.dp)
-                )
-
-                OutlinedTextField(
-                    value = name,
-                    onValueChange = { name = it },
-                    label = { Text("Nombre completo") },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
 
                 OutlinedTextField(
                     value = email,
@@ -74,21 +62,38 @@ fun SignUpScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Button(
-                    onClick = {navController.navigate("role_selection") },
+                    onClick = { viewModel.login(email, password) },
                     modifier = Modifier.fillMaxWidth(),
                     shape = MaterialTheme.shapes.extraLarge
                 ) {
-                    Text("Registrarse", fontSize = 18.sp)
+                    Text("Iniciar Sesión", fontSize = 18.sp)
+                }
+
+                if (uiState.errorMessage != null) {
+                    Text(
+                        text = uiState.errorMessage ?: "",
+                        color = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.padding(top = 12.dp)
+                    )
+                }
+
+                if (uiState.success) {
+                    // Navega al home o selección de rol
+                    LaunchedEffect(Unit) {
+                        navController.navigate("role_selection") {
+                            popUpTo("login") { inclusive = true }
+                        }
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 TextButton(
-                    onClick = { navController.navigate("role_selection") },
+                    onClick = { navController.navigate("register") },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        "¿Ya tienes una cuenta? Iniciar sesión",
+                        "¿No tienes una cuenta? Regístrate",
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.primary
                     )
