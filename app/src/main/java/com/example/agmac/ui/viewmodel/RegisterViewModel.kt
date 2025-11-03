@@ -4,13 +4,16 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.agmac.data.repository.UserRepository
+import com.example.agmac.data.SessionManager
+import com.example.agmac.data.repository.AuthRepositoryImpl
+import com.example.agmac.data.repository.remote.ApiServiceProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class RegisterViewModel(application: Application) : AndroidViewModel(application) {
-    private val repo = UserRepository(application)
+    private val repo = AuthRepositoryImpl(ApiServiceProvider.authApi)
+    private val appContext = getApplication<Application>().applicationContext
     data class RegisterUiState(
         val isLoading: Boolean = false,
         val success: Boolean = false,
@@ -23,8 +26,13 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
         viewModelScope.launch {
             _uiState.value = RegisterUiState(isLoading = true)
 
-            val result = repo.register(name, email, password)
+            val result = repo.registerUser(name, email, password)
             if (result) {
+                // Login automático para obtener el id
+                val user = repo.loginUser(email, password)
+                if (user != null) {
+                    SessionManager.saveUserId(appContext, user.id)
+                }
                 _uiState.value = RegisterUiState(success = true)
                 Log.d("RegisterTest", "Usuario registrado correctamente: $email")
             } else {

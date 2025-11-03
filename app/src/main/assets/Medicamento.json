@@ -1,0 +1,255 @@
+[
+
+  {
+    "id": 2,
+    "codigo_medicina": "AMLOD5",
+    "nombre_comercial": "Amlodipina 5mg",
+    "descripcion": "Para la presión arterial"
+  },
+  {
+    "id": 3,
+    "codigo_medicina": "LOSA50",
+    "nombre_comercial": "Losartán 50mg",
+    "descripcion": "Para la presión arterial"
+  },
+  {
+    "id": 4,
+    "codigo_medicina": "IBU600",
+    "nombre_comercial": "Ibuprofeno 600mg",
+    "descripcion": "Antiinflamatorio y analgésico"
+  },
+  {
+    "id": 5,
+    "codigo_medicina": "AMOX500",
+    "nombre_comercial": "Amoxicilina 500mg",
+    "descripcion": "Antibiótico"
+  },
+  {
+    "id": 6,
+    "codigo_medicina": "AZIT500",
+    "nombre_comercial": "Azitromicina 500mg",
+    "descripcion": "Antibiótico"
+  },
+  {
+    "id": 7,
+    "codigo_medicina": "METF850",
+    "nombre_comercial": "Metformina 850mg",
+    "descripcion": "Para la diabetes tipo 2"
+  },
+  {
+    "id": 8,
+    "codigo_medicina": "ATOR20",
+    "nombre_comercial": "Atorvastatina 20mg",
+    "descripcion": "Para el colesterol"
+  },
+  {
+    "id": 9,
+    "codigo_medicina": "OMEP20",
+    "nombre_comercial": "Omeprazol 20mg",
+    "descripcion": "Protector gástrico"
+  },
+  {
+    "id": 10,
+    "codigo_medicina": "CLON05",
+    "nombre_comercial": "Clonazepam 0.5mg",
+    "descripcion": "Ansiolítico"
+  },
+  {
+    "id": 11,
+    "codigo_medicina": "SALB100",
+    "nombre_comercial": "Salbutamol Inhalador 100mcg",
+    "descripcion": "Para el asma"
+  },
+  {
+    "id": 12,
+    "codigo_medicina": "ENAL10",
+    "nombre_comercial": "Enalapril 10mg",
+    "descripcion": "Para la presión arterial"
+  },
+  {
+    "id": 13,
+    "codigo_medicina": "ASP100",
+    "nombre_comercial": "Aspirina 100mg (Cardio)",
+    "descripcion": "Anticoagulante"
+  },
+  {
+    "id": 14,
+    "codigo_medicina": "SIMV20",
+    "nombre_comercial": "Simvastatina 20mg",
+    "descripcion": "Para el colesterol"
+  },
+  {
+    "id": 15,
+    "codigo_medicina": "LEVO50",
+    "nombre_comercial": "Levotiroxina 50mcg",
+    "descripcion": "Para la tiroides"
+  },
+  {
+    "id": 16,
+    "codigo_medicina": "MONT10",
+    "nombre_comercial": "Montelukast 10mg",
+    "descripcion": "Antialérgico, asma"
+  },
+  {
+    "id": 17,
+    "codigo_medicina": "PRES5",
+    "nombre_comercial": "Prednisona 5mg",
+    "descripcion": "Corticoide, antiinflamatorio"
+  },
+  {
+    "id": 18,
+    "codigo_medicina": "TRAM50",
+    "nombre_comercial": "Tramadol 50mg",
+    "descripcion": "Analgésico potente"
+  },
+  {
+    "id": 19,
+    "codigo_medicina": "FURO40",
+    "nombre_comercial": "Furosemida 40mg",
+    "descripcion": "Diurético"
+  },
+  {
+    "id": 20,
+    "codigo_medicina": "GAB300",
+    "nombre_comercial": "Gabapentina 300mg",
+    "descripcion": "Dolor neuropático, epilepsia"
+  },
+  {
+    "id": 21,
+    "codigo_medicina": "SERT50",
+    "nombre_comercial": "Sertralina 50mg",
+    "descripcion": "Antidepresivo"
+  },
+  {
+    "id": 22,
+    "codigo_medicina": "CIPRO500",
+    "nombre_comercial": "Ciprofloxacino 500mg",
+    "descripcion": "Antibiótico"
+  },
+  {
+    "id": 23,
+    "codigo_medicina": "LORA10",
+    "nombre_comercial": "Loratadina 10mg",
+    "descripcion": "Antialérgico"
+  },
+  {
+    "id": 24,
+    "codigo_medicina": "ALPR05",
+    "nombre_comercial": "Alprazolam 0.5mg",
+    "descripcion": "Ansiolítico"
+  },
+  {
+    "id": 25,
+    "codigo_medicina": "DICLO75",
+    "nombre_comercial": "Diclofenaco 75mg",
+    "descripcion": "Antiinflamatorio"
+  },
+  {
+    "id": 26,
+    "codigo_medicina": "RANIT150",
+    "nombre_comercial": "Ranitidina 150mg",
+    "descripcion": "Antiácido"
+  },
+  {
+    "id": 27,
+    "codigo_medicina": "WARF5",
+    "nombre_comercial": "Warfarina 5mg",
+    "descripcion": "Anticoagulante"
+  },
+  {
+    "id": 28,
+    "codigo_medicina": "INSU_R",
+    "nombre_comercial": "Insulina Rápida",
+    "descripcion": "Diabetes tipo 1 y 2"
+  },
+  {
+    "id": 29,
+    "codigo_medicina": "INSU_NPH",
+    "nombre_comercial": "Insulina NPH",
+    "descripcion": "Diabetes tipo 1 y 2"
+  },
+  {
+    "id": 30,
+    "codigo_medicina": "CARB20",
+    "nombre_comercial": "Carbamazepina 200mg",
+    "descripcion": "Anticonvulsivo"
+  },
+  {
+    "id": 31,
+    "codigo_medicina": "NIFE30",
+    "nombre_comercial": "Nifedipino 30mg",
+    "descripcion": "Para la presión arterial"
+  },
+  {
+    "id": 32,
+    "codigo_medicina": "GLIB5",
+    "nombre_comercial": "Glibenclamida 5mg",
+    "descripcion": "Para la diabetes tipo 2"
+  },
+  {
+    "id": 33,
+    "codigo_medicina": "FLUC150",
+    "nombre_comercial": "Fluconazol 150mg",
+    "descripcion": "Antifúngico"
+  },
+  {
+    "id": 34,
+    "codigo_medicina": "CELE200",
+    "nombre_comercial": "Celecoxib 200mg",
+    "descripcion": "Antiinflamatorio (Artritis)"
+  },
+  {
+    "id": 35,
+    "codigo_medicina": "ESC10",
+    "nombre_comercial": "Escitalopram 10mg",
+    "descripcion": "Antidepresivo"
+  },
+  {
+    "id": 36,
+    "codigo_medicina": "METRO500",
+    "nombre_comercial": "Metronidazol 500mg",
+    "descripcion": "Antibiótico, antiparasitario"
+  },
+  {
+    "id": 37,
+    "codigo_medicina": "PANTO40",
+    "nombre_comercial": "Pantoprazol 40mg",
+    "descripcion": "Protector gástrico"
+  },
+  {
+    "id": 38,
+    "codigo_medicina": "HIDRO125",
+    "nombre_comercial": "Hidroclorotiazida 12.5mg",
+    "descripcion": "Diurético"
+  },
+  {
+    "id": 39,
+    "codigo_medicina": "BISA5",
+    "nombre_comercial": "Bisacodilo 5mg",
+    "descripcion": "Laxante"
+  },
+  {
+    "id": 40,
+    "codigo_medicina": "CLOP75",
+    "nombre_comercial": "Clopidogrel 75mg",
+    "descripcion": "Antiplaquetario"
+  },
+  {
+    "id": 41,
+    "codigo_medicina": "DONE5",
+    "nombre_comercial": "Donepezilo 5mg",
+    "descripcion": "Para el Alzheimer"
+  },
+  {
+    "id": 42,
+    "codigo_medicina": "CODE30",
+    "nombre_comercial": "Codeína 30mg",
+    "descripcion": "Analgésico (tos)"
+  },
+  {
+    "id": 43,
+    "codigo_medicina": "DIAZ10",
+    "nombre_comercial": "Diazepam 10mg",
+    "descripcion": "Ansiolítico, relajante muscular"
+  }
+]
