@@ -4,6 +4,10 @@
     package="com.example.agmac">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Permiso para publicar notificaciones en Android 13+ -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Permiso para programar alarmas exactas (Android S+). El usuario puede necesitar conceder la excepción en Ajustes. -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
     <application
         android:allowBackup="true"
@@ -25,6 +29,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Receiver para mostrar la notificación cuando suene la alarma -->
+        <receiver
+            android:name=".receivers.ReminderReceiver"
+            android:exported="false" />
+
     </application>
 
 </manifest>
