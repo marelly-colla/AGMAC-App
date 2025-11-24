@@ -25,7 +25,7 @@ fun BottomNavigationBar(navController: NavHostController) {
     val items = if (SessionManager.role == "cuidador") {
         listOf(
             BottomNavItem("Inicio", Icons.Outlined.Home, "caregiver_home"),
-            BottomNavItem("Medicación", Icons.Outlined.MedicalServices, "caregiver_home"),
+            BottomNavItem("Pacientes", Icons.Outlined.MedicalServices, "list_patients"),
             BottomNavItem("Reportes", Icons.Outlined.Analytics, "reports"),
             BottomNavItem("Ajustes", Icons.Outlined.Settings, "caregiver_settings")
         )
@@ -33,7 +33,7 @@ fun BottomNavigationBar(navController: NavHostController) {
         // por defecto o "paciente"
         listOf(
             BottomNavItem("Inicio", Icons.Outlined.Home, "patient_home"),
-            BottomNavItem("Pacientes", Icons.Outlined.MedicalServices, "patient_medication"),
+            BottomNavItem("Medicación", Icons.Outlined.MedicalServices, "patient_medication"),
             BottomNavItem("Reportes", Icons.Outlined.Analytics, "reports"),
             BottomNavItem("Ajustes", Icons.Outlined.Settings, "patient_settings")
         )

@@ -2,8 +2,10 @@ package com.example.agmac.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.agmac.ui.screens.*
 import com.example.agmac.data.SessionManager
 import com.example.agmac.ui.auth.SignUpScreen
@@ -47,7 +49,15 @@ fun AppNavHost(navController: NavHostController) {
 
         // Rutas adicionales por rol
         composable("patient_medication") { PatientMedicationScreen(navController) }
+        composable("list_patients") { MisPacientesScreen(navController)}
         composable("patient_settings") { PatientSettingsScreen(navController) }
         composable("caregiver_settings") { CaregiverSettingsScreen(navController) }
+        composable(
+            "patient_detail/{pacienteId}",
+            arguments = listOf(navArgument("pacienteId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val pacienteId = backStackEntry.arguments?.getInt("pacienteId") ?: 0
+            PacienteDetalleScreen(navController, pacienteId)
+        }
     }
 }

@@ -1,7 +1,6 @@
 package com.example.agmac.ui.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,23 +13,32 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.Image
-import androidx.compose.ui.res.painterResource
-import com.example.agmac.R
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 
 //importar Theme y boton de navegación
 import com.example.agmac.ui.theme.AppTheme
 import com.example.agmac.ui.components.BottomNavigationBar
 import com.example.agmac.ui.components.SectionTitle
 import androidx.navigation.NavHostController
+import com.example.agmac.data.model.EstadoPaciente
+import com.example.agmac.ui.viewmodel.PacientesViewModel
+import com.example.agmac.ui.components.PacienteCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CaregiverHomeScreen(navController: NavHostController) {
+fun CaregiverHomeScreen(
+    navController: NavHostController,
+    viewModel: PacientesViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+) {
+    val pacientes by viewModel.pacientes.collectAsState(initial = emptyList())
+
+    // Filtrar los pacientes que no están al día
+    val pacientesEnFalta = pacientes.filter { it.estado != EstadoPaciente.AL_DIA }
+
     AppTheme {
         Scaffold(
             topBar = {
@@ -68,27 +76,17 @@ fun CaregiverHomeScreen(navController: NavHostController) {
             ) {
                 item {
                     SectionTitle("Mis Pacientes")
-
-                    val pacientes = listOf(
-                        Paciente(
-                            "Elena Ramírez", "Última dosis: 10:00 AM",
-                            R.drawable.user1
-                        ),
-                        Paciente(
-                            "Carlos Mendoza", "Última dosis: 12:00 PM",
-                            R.drawable.user2
-                        )
-                    )
-
-                    pacientes.forEach { paciente ->
-                        PacienteItem(paciente)
-                        Spacer(modifier = Modifier.height(8.dp))
-                    }
-
-                    Spacer(modifier = Modifier.height(24.dp))
-                    SectionTitle("Alertas Recientes")
                 }
-
+                items(pacientesEnFalta) { paciente ->
+                    PacienteCard(
+                        paciente = paciente,
+                        navController = navController
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
+                item {
+                    SectionTitle("Alarmas recientes")
+                }
                 items(
                     listOf(
                         Alerta("Elena Ramírez", "Medicamento omitido", "Hace 2 horas"),
@@ -99,57 +97,6 @@ fun CaregiverHomeScreen(navController: NavHostController) {
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             }
-        }
-    }
-}
-
-data class Paciente(val nombre: String, val detalle: String, val imagenRes: Int)
-
-@Composable
-fun PacienteItem(paciente: Paciente) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { /* TODO: Navegar al detalle */ },
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.onPrimary
-        )
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(12.dp)
-        ) {
-            Image(
-                painter = painterResource(paciente.imagenRes),
-                contentDescription = paciente.nombre,
-                modifier = Modifier
-                    .size(56.dp)
-                    .clip(CircleShape),
-                contentScale = ContentScale.Crop
-            )
-
-            Spacer(modifier = Modifier.width(12.dp))
-
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    paciente.nombre,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-                Text(
-                    paciente.detalle,
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
-                )
-            }
-
-            Icon(
-                imageVector = Icons.Outlined.ChevronRight,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.4f)
-            )
         }
     }
 }

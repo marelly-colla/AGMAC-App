@@ -99,6 +99,16 @@ fun SignUpScreen(navController: NavController, viewModel: LoginViewModel = viewM
                         color = MaterialTheme.colorScheme.primary
                     )
                 }
+                TextButton(
+                    onClick = { navController.navigate("role_selection") },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        "Skip login",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
             }
         }
     }
