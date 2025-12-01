@@ -12,9 +12,14 @@ data class CreateAlertaRequest(
     val estado: String
 )
 
+// Para PUT, el backend suele esperar el objeto completo. Hacemos id_paciente e id_medicamento no nulos
+// y también incluimos hora_programada que es parte del objeto alerta.
 data class UpdateAlertaRequest(
     val estado: String,
-    val hora_confirmacion: String? = null
+    val hora_confirmacion: String? = null,
+    val id_paciente: Int,
+    val id_medicamento: Int,
+    val hora_programada: String
 )
 
 interface AlertApi {

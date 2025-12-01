@@ -10,6 +10,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import android.util.Log
+import java.text.SimpleDateFormat
+import java.util.TimeZone
+import java.util.Locale
 
 class PatientMedicationViewModel(application: Application) : AndroidViewModel(application) {
     private val appContext = getApplication<Application>().applicationContext
@@ -21,6 +24,9 @@ class PatientMedicationViewModel(application: Application) : AndroidViewModel(ap
     // Nuevo: estado para mensajes de error desde operaciones remotas
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage = _errorMessage.asStateFlow()
+    // Mensajes informativos (ej. operación exitosa)
+    private val _infoMessage = MutableStateFlow<String?>(null)
+    val infoMessage = _infoMessage.asStateFlow()
 
     fun loadAlertas() {
         val idPaciente = SessionManager.getUserId(appContext)
@@ -42,8 +48,13 @@ class PatientMedicationViewModel(application: Application) : AndroidViewModel(ap
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                AlertRepository.markAlertAsTaken(appContext, idAlerta, horaConfirmacion)
-                loadAlertas()
+                val ok = AlertRepository.markAlertAsTaken(appContext, idAlerta, horaConfirmacion)
+                if (ok) {
+                    _infoMessage.value = "Alerta marcada como tomada"
+                    loadAlertas()
+                } else {
+                    _errorMessage.value = "No se pudo marcar la alerta como tomada (servidor rechazó la petición)."
+                }
             } catch (e: Exception) {
                 Log.e("PatientMedicationVM", "Error marcando alerta", e)
                 _errorMessage.value = "Error marcando alerta: ${e.message}"
@@ -102,5 +113,13 @@ class PatientMedicationViewModel(application: Application) : AndroidViewModel(ap
                 _isLoading.value = false
             }
         }
+    }
+
+    fun clearErrorMessage() {
+        _errorMessage.value = null
+    }
+
+    fun clearInfoMessage() {
+        _infoMessage.value = null
     }
 }

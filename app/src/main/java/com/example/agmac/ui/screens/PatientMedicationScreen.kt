@@ -13,9 +13,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -27,24 +33,22 @@ import com.example.agmac.ui.viewmodel.PatientMedicationViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PatientMedicationScreen(navController: NavHostController) {
     val viewModel: PatientMedicationViewModel = viewModel()
-    val alertas by viewModel.alertas.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
-    val vmError by viewModel.errorMessage.collectAsState()
     val context = LocalContext.current
 
     // --- Panel de creación de alerta ---
     var medicamentoNombre by remember { mutableStateOf("") }
     var medicamentoId by remember { mutableStateOf<Int?>(null) }
-    var dosis by remember { mutableStateOf("") }
+    // split dosis into amount + unit
+    var dosisAmount by remember { mutableStateOf("") }
+    var dosisUnit by remember { mutableStateOf("pastillas") }
+    val unitOptions = listOf("pastillas", "ml", "g", "oz")
+    var unitExpanded by remember { mutableStateOf(false) }
+
     var fechaInicioStr by remember { mutableStateOf(SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())) }
     var numeroDeDias by remember { mutableStateOf(1) }
     var horasDelDia by remember { mutableStateOf(listOf<String>()) }
@@ -58,20 +62,11 @@ fun PatientMedicationScreen(navController: NavHostController) {
         Gson().fromJson(json, object : TypeToken<List<Medicamento>>() {}.type)
     }
 
-    // Filtrar para autocompletar
-    val opcionesAutocomplete = medicamentos.filter {
-        it.nombre_comercial.contains(medicamentoNombre, ignoreCase = true) && medicamentoNombre.isNotBlank()
-    }
-
-    LaunchedEffect(Unit) {
-        viewModel.loadAlertas()
-    }
-
     AppTheme {
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text("Medicación", style = MaterialTheme.typography.titleLarge) }
+                    title = { Text("Agregar medicamento", style = MaterialTheme.typography.titleLarge) }
                 )
             },
             bottomBar = { BottomNavigationBar(navController) },
@@ -84,17 +79,6 @@ fun PatientMedicationScreen(navController: NavHostController) {
                     .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.Start
             ) {
-                // Mostrar error remoto si existe
-                if (vmError != null) {
-                    Text(
-                        text = vmError ?: "",
-                        color = MaterialTheme.colorScheme.error,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                    )
-                }
-
                 // Panel de creación de alerta
                 SectionTitle("Agregar nueva alerta")
                 Spacer(modifier = Modifier.height(8.dp))
@@ -109,7 +93,10 @@ fun PatientMedicationScreen(navController: NavHostController) {
                     modifier = Modifier.fillMaxWidth(),
                     colors = TextFieldDefaults.colors()
                 )
-                if (showAutocomplete && opcionesAutocomplete.isNotEmpty()) {
+                if (showAutocomplete && medicamentos.isNotEmpty()) {
+                    val opcionesAutocomplete = medicamentos.filter {
+                        it.nombre_comercial.contains(medicamentoNombre, ignoreCase = true) && medicamentoNombre.isNotBlank()
+                    }
                     opcionesAutocomplete.take(5).forEach { opcion ->
                         Text(
                             text = opcion.nombre_comercial,
@@ -126,12 +113,32 @@ fun PatientMedicationScreen(navController: NavHostController) {
                     }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
-                TextField(
-                    value = dosis,
-                    onValueChange = { dosis = it },
-                    label = { Text("Dosis") },
-                    modifier = Modifier.fillMaxWidth()
-                )
+
+                // Dosis dividido: cantidad + unidad
+                Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                    TextField(
+                        value = dosisAmount,
+                        onValueChange = { new -> dosisAmount = new.filter { it.isDigit() || it == '.' } },
+                        label = { Text("Cantidad") },
+                        modifier = Modifier.width(120.dp),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Box(modifier = Modifier.wrapContentSize()) {
+                        OutlinedButton(onClick = { unitExpanded = true }) {
+                            Text(dosisUnit)
+                        }
+                        DropdownMenu(expanded = unitExpanded, onDismissRequest = { unitExpanded = false }) {
+                            unitOptions.forEach { unit ->
+                                DropdownMenuItem(text = { Text(unit) }, onClick = { dosisUnit = unit; unitExpanded = false })
+                            }
+                        }
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
+                    // opcional: mostrar preview de la dosis completa
+                    Text(text = if (dosisAmount.isBlank()) "" else " = ${dosisAmount.trim()} ${dosisUnit}")
+                }
+
                 Spacer(modifier = Modifier.height(8.dp))
                 TextField(
                     value = fechaInicioStr,
@@ -148,12 +155,11 @@ fun PatientMedicationScreen(navController: NavHostController) {
                         .fillMaxWidth()
                         .padding(vertical = 8.dp)
                         .clickable {
-                            // Abrir TimePickerDialog (mostrar AM/PM: is24Hour = false)
+                            // Abrir TimePickerDialog
                             val now = Calendar.getInstance()
                             TimePickerDialog(
                                 context,
                                 { _, hourOfDay, minute ->
-                                    // Guardamos internamente en HH:mm para backend
                                     val horaSeleccionada = String.format(Locale.getDefault(), "%02d:%02d", hourOfDay, minute)
                                     if (!horasDelDia.contains(horaSeleccionada)) {
                                         horasDelDia = horasDelDia + horaSeleccionada
@@ -161,12 +167,11 @@ fun PatientMedicationScreen(navController: NavHostController) {
                                 },
                                 now.get(Calendar.HOUR_OF_DAY),
                                 now.get(Calendar.MINUTE),
-                                false // usar AM/PM visualmente
+                                false
                             ).show()
                         },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Mostrar etiquetas legibles (ej. 1:00 PM) para la UI
                     val displayLabels = remember(horasDelDia) {
                         horasDelDia.map { hhmm ->
                             try {
@@ -174,8 +179,8 @@ fun PatientMedicationScreen(navController: NavHostController) {
                                 val date = parser.parse(hhmm)
                                 val formatter = SimpleDateFormat("hh:mm a", Locale.getDefault())
                                 if (date != null) formatter.format(date) else hhmm
-                            } catch (e: Exception) {
-                                android.util.Log.w("PatientMedication", "Error formateando hora: $hhmm", e)
+                            } catch (_: Exception) {
+                                android.util.Log.w("PatientMedication", "Error formateando hora: $hhmm")
                                 hhmm
                             }
                         }
@@ -200,13 +205,12 @@ fun PatientMedicationScreen(navController: NavHostController) {
                                 val parser = SimpleDateFormat("HH:mm", Locale.getDefault())
                                 val d = parser.parse(hora)
                                 if (d != null) SimpleDateFormat("hh:mm a", Locale.getDefault()).format(d) else hora
-                            } catch (e: Exception) {
-                                android.util.Log.w("PatientMedication", "Error formateando hora para chip: $hora", e)
+                            } catch (_: Exception) {
+                                android.util.Log.w("PatientMedication", "Error formateando hora para chip: $hora")
                                 hora
                             }
                             AssistChip(
                                 onClick = {
-                                    // Remover hora al pulsar el chip
                                     horasDelDia = horasDelDia.filterIndexed { i, _ -> i != index }
                                 },
                                 label = { Text(label) },
@@ -241,23 +245,25 @@ fun PatientMedicationScreen(navController: NavHostController) {
                         errorMsg = ""
                         if (medicamentoId == null) {
                             errorMsg = "Selecciona un medicamento válido."
-                        } else if (dosis.isBlank()) {
-                            errorMsg = "Ingresa la dosis."
+                        } else if (dosisAmount.isBlank()) {
+                            errorMsg = "Ingresa la dosis (cantidad)."
                         } else if (horasDelDia.isEmpty()) {
                             errorMsg = "Agrega al menos una hora."
                         } else if (numeroDeDias < 1) {
                             errorMsg = "El número de días debe ser mayor a 0."
                         } else {
+                            val dosisConcat = "${dosisAmount.trim()} $dosisUnit"
                             viewModel.createAlertSchedule(
-                                medicamentoId!!,
-                                dosis,
-                                fechaInicioStr,
-                                numeroDeDias,
-                                horasDelDia
+                                idMedicamento = medicamentoId!!,
+                                dosis = dosisConcat,
+                                fechaInicioStr = fechaInicioStr,
+                                numeroDeDias = numeroDeDias,
+                                horasDelDia = horasDelDia
                             )
                             medicamentoNombre = ""
                             medicamentoId = null
-                            dosis = ""
+                            dosisAmount = ""
+                            dosisUnit = "pastillas"
                             horasDelDia = emptyList()
                             numeroDeDias = 1
                         }
@@ -268,75 +274,6 @@ fun PatientMedicationScreen(navController: NavHostController) {
                 }
                 if (errorMsg.isNotBlank()) {
                     Text(errorMsg, color = MaterialTheme.colorScheme.error)
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-                SectionTitle("Próximas dosis")
-                Spacer(modifier = Modifier.height(8.dp))
-
-                if (isLoading) {
-                    CircularProgressIndicator()
-                } else {
-                    if (alertas.isEmpty()) {
-                        Text("No hay alertas programadas.")
-                    } else {
-                        alertas.forEach { alerta ->
-                            Card(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 4.dp),
-                                shape = RoundedCornerShape(12.dp)
-                            ) {
-                                Row(
-                                    modifier = Modifier
-                                        .padding(16.dp),
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Column(modifier = Modifier.weight(1f)) {
-                                        Text(
-                                            text = "${alerta.dosis} · ${alerta.hora_programada}",
-                                            fontSize = 18.sp
-                                        )
-                                        Text(
-                                            text = "Estado: ${alerta.estado}",
-                                            fontSize = 14.sp
-                                        )
-                                    }
-                                    if (alerta.estado == "PENDIENTE") {
-                                        Button(
-                                            onClick = {
-                                                val now = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US).format(Date())
-                                                viewModel.markAlertAsTaken(alerta.id_alerta, now)
-                                            },
-                                            modifier = Modifier.padding(end = 8.dp)
-                                        ) {
-                                            Text("Tomar")
-                                        }
-                                    }
-                                    IconButton(onClick = { viewModel.deleteAlert(alerta.id_alerta) }) {
-                                        Icon(Icons.Outlined.Delete, contentDescription = "Eliminar")
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-                SectionTitle("Historial rápido")
-                Spacer(modifier = Modifier.height(8.dp))
-                Card(
-                    shape = RoundedCornerShape(12.dp),
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-                ) {
-                    Column(modifier = Modifier.padding(12.dp)) {
-                        Text("Últimas tomas: 3/4 hoy", style = MaterialTheme.typography.bodyLarge)
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-                            Text("Adherencia: 75%")
-                            Text("Ver detalles", color = MaterialTheme.colorScheme.primary)
-                        }
-                    }
                 }
 
                 Spacer(modifier = Modifier.height(80.dp))

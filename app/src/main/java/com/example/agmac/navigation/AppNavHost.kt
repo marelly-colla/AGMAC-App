@@ -1,6 +1,8 @@
 package com.example.agmac.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -13,6 +15,13 @@ import com.example.agmac.ui.auth.RegisterScreen
 
 @Composable
 fun AppNavHost(navController: NavHostController) {
+    // Diagnóstico: loguear cambios de ruta
+    LaunchedEffect(navController) {
+        navController.currentBackStackEntryFlow.collect { entry ->
+            Log.d("NavDebug", "Ruta actual: ${entry.destination.route}")
+        }
+    }
+
     NavHost(
         navController = navController,
         startDestination = "splash" // La primera pantalla al abrir la app

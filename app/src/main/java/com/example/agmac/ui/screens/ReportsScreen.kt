@@ -116,7 +116,7 @@ fun ReportsScreen(navController: NavHostController) {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Botones de acción: Exportar / Compartir
+                // Botones de acción: Exportar / Compartir (TODO)
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -124,7 +124,7 @@ fun ReportsScreen(navController: NavHostController) {
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Button(
-                        onClick = { /* TODO */ },
+                        onClick = { /* TODO: Exportar */ },
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.surface
@@ -133,7 +133,7 @@ fun ReportsScreen(navController: NavHostController) {
                         Text("Exportar")
                     }
                     Button(
-                        onClick = { /* TODO */ },
+                        onClick = { /* TODO: Compartir */ },
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.primary
