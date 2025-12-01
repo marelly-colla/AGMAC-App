@@ -2,6 +2,7 @@ package com.example.agmac.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
@@ -26,11 +27,12 @@ fun MedicamentoCard(medicamento: MedicamentoHoy) {
         MedicamentoEstado.TOMADO ->
             Triple(Color(0xFFE8F5E9), Color(0xFF4CAF50), Icons.Outlined.CheckCircle)
     }
-
+    // Nuevo fondo oscuro para TODA la tarjeta
+    val cardBackground = Color(0xFF1E1E1E)
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(bg, RoundedCornerShape(16.dp))
+            .background(cardBackground, RoundedCornerShape(16.dp))
             .padding(16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -39,7 +41,7 @@ fun MedicamentoCard(medicamento: MedicamentoHoy) {
             Box(
                 modifier = Modifier
                     .size(48.dp)
-                    .background(iconColor.copy(alpha = 0.15f), RoundedCornerShape(12.dp)),
+                    .background(iconColor.copy(alpha = 0.15f), CircleShape),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
@@ -57,11 +59,11 @@ fun MedicamentoCard(medicamento: MedicamentoHoy) {
                     text = medicamento.nombre,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
-                    color = Color.Black
+                    color = Color.White
                 )
                 Text(
                     text = medicamento.dosis,
-                    color = Color.Gray,
+                    color = Color.LightGray,
                     fontSize = 14.sp
                 )
             }
@@ -70,7 +72,7 @@ fun MedicamentoCard(medicamento: MedicamentoHoy) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 medicamento.hora,
-                color = Color.Gray,
+                color = Color.LightGray,
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.sp
             )

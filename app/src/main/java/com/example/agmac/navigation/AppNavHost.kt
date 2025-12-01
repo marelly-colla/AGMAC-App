@@ -59,5 +59,9 @@ fun AppNavHost(navController: NavHostController) {
             val pacienteId = backStackEntry.arguments?.getInt("pacienteId") ?: 0
             PacienteDetalleScreen(navController, pacienteId)
         }
+        composable("detalle_medicamento/{id}") { backStack ->
+            val id = backStack.arguments?.getString("id")?.toIntOrNull()
+            DetalleMedicamentoScreen(id = id)
+        }
     }
 }

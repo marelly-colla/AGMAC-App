@@ -6,6 +6,13 @@ data class PacienteDetalle(
     val fotoUrl: String,
     val rol: String
 )
+data class MedicamentoHoyConId(
+    val id: Int,
+    val nombre: String,
+    val dosis: String,
+    val hora: String,
+    val estado: MedicamentoEstado
+)
 
 data class MedicamentoHoy(
     val nombre: String,
