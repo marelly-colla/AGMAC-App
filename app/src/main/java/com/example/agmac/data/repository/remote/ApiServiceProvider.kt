@@ -13,5 +13,13 @@ object ApiServiceProvider {
             .build()
             .create(AuthApi::class.java)
     }
-}
 
+    // Nuevo provider para relaciones cuidador-paciente
+    val caregiverPatientApi: CaregiverPatientApi by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(CaregiverPatientApi::class.java)
+    }
+}
