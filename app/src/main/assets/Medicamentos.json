@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "pacienteId": 1,
+    "nombre": "Paracetamol",
+    "dosis": "500 mg",
+    "hora": "08:00",
+    "estado": "PENDIENTE"
+  },
+  {
+    "id": 2,
+    "pacienteId": 1,
+    "nombre": "Ibuprofeno",
+    "dosis": "200 mg",
+    "hora": "14:00",
+    "estado": "TOMADO"
+  },
+  {
+    "id": 2,
+    "pacienteId": 2,
+    "nombre": "Ibuprofeno",
+    "dosis": "500 mg",
+    "hora": "16:30",
+    "estado": "TOMADO"
+  }
+]

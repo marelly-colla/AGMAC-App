@@ -22,7 +22,11 @@ import com.example.agmac.data.model.Paciente
 import androidx.navigation.NavHostController
 
 @Composable
-fun PacienteCard(paciente: Paciente, navController: NavHostController) {
+fun PacienteCard(
+    paciente: Paciente,
+    navController: NavHostController,
+    onDelete: (Int) -> Unit
+) {
     Card(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
@@ -67,15 +71,15 @@ fun PacienteCard(paciente: Paciente, navController: NavHostController) {
                     }
                 }
 
-                IconButton(onClick = { /* TODO: menú */ }) {
-                    Icon(Icons.Outlined.MoreVert, contentDescription = "Más")
+                IconButton(onClick = { onDelete(paciente.id) }) {
+                    Icon(Icons.Outlined.Delete, contentDescription = "Eliminar paciente")
                 }
             }
 
             Spacer(modifier = Modifier.height(12.dp))
 
             Button(
-                onClick = { navController.navigate("patient_detail/${paciente.id}")  },
+                onClick = { navController.navigate("patient_detail/${paciente.id}")},
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(10.dp)
             ) {

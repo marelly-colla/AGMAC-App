@@ -51,7 +51,7 @@ fun MisPacientesScreen(
             bottomBar = { BottomNavigationBar(navController) },
             floatingActionButton = {
                 ExtendedFloatingActionButton(
-                    onClick = { /* TODO: añadir paciente */ },
+                    onClick = { navController.navigate("create_patient") },
                     icon = { Icon(Icons.Outlined.Add, contentDescription = null) },
                     text = { Text("Añadir Paciente") }
                 )
@@ -64,10 +64,13 @@ fun MisPacientesScreen(
                     .padding(16.dp)
             ) {
                 items(pacientes) { paciente ->
-                    PacienteCard(paciente = paciente, navController = navController)
+                    PacienteCard(
+                        paciente = paciente,
+                        navController = navController,
+                        onDelete = { id -> viewModel.deletePaciente(id)}
+                    )
                     Spacer(modifier = Modifier.height(12.dp))
                 }
-
                 item { Spacer(modifier = Modifier.height(80.dp)) }
             }
         }

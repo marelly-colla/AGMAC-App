@@ -80,7 +80,8 @@ fun CaregiverHomeScreen(
                 items(pacientesEnFalta) { paciente ->
                     PacienteCard(
                         paciente = paciente,
-                        navController = navController
+                        navController = navController,
+                        onDelete = { id -> viewModel.deletePaciente(id)}
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                 }

@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "nombre": "Ana García",
+    "estado": "AL_DIA",
+    "fotoUrl": "https://previews.123rf.com/images/mrswilkins/mrswilkins1705/mrswilkins170500015/80934398-profile-picture-illustration-woman-vector.jpg"
+  },
+  {
+    "id": 2,
+    "nombre": "Carlos Rodríguez",
+    "estado": "REQUIERE",
+    "fotoUrl": "https://static.vecteezy.com/ti/vetor-gratis/p1/9952572-foto-de-perfil-masculino-vetor.jpg"
+  },
+  {
+    "id": 3,
+    "nombre": "Beatriz López",
+    "estado": "OMISION",
+    "fotoUrl": "https://previews.123rf.com/images/mrswilkins/mrswilkins1705/mrswilkins170500015/80934398-profile-picture-illustration-woman-vector.jpg"
+  }
+]
