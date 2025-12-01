@@ -74,3 +74,8 @@ fun AppNavHost(navController: NavHostController) {
         }
     }
 }
+
+@Composable
+fun DetalleMedicamentoScreen(id: Int?) {
+    TODO("Not yet implemented")
+}
