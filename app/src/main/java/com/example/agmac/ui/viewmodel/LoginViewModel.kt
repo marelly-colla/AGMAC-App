@@ -6,12 +6,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.agmac.data.SessionManager
 import com.example.agmac.data.repository.AuthRepositoryImpl
 import com.example.agmac.data.repository.remote.ApiServiceProvider
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class LoginViewModel(application: Application) : AndroidViewModel(application) {
-    private val repo = AuthRepositoryImpl(ApiServiceProvider.authApi)
     private val appContext = getApplication<Application>().applicationContext
     data class LoginUiState(
         val isLoading: Boolean = false,
@@ -26,9 +27,14 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
 
-            val user = repo.loginUser(email, password)
+            val user = withContext(Dispatchers.IO) {
+                val repo = AuthRepositoryImpl(ApiServiceProvider.authApi)
+                repo.loginUser(email, password)
+            }
             if (user != null) {
-                SessionManager.saveUserId(appContext, user.id)
+                withContext(Dispatchers.IO) {
+                    SessionManager.saveUserId(appContext, user.id)
+                }
                 _uiState.value = LoginUiState(success = true)
             } else {
                 _uiState.value = LoginUiState(errorMessage = "Credenciales incorrectas")
